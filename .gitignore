@@ -7,11 +7,9 @@ __pycache__/
 venv/
 *.part
 
-# Large model weights and data - never commit to Git
+# Large video data - never commit
 videos/
-results/
 _uploads/
-models/
 third_party/
 mingit/
 *.mp4
@@ -19,12 +17,22 @@ mingit/
 *.avi
 *.mkv
 *.m4v
-*.pt
+
+# Heavy model checkpoints (exclude large pretrained weights, allow 50KB adaptive calibrator)
+models/*
+!models/adaptive_pytorch_calibrator.pt
 *.pth
 *.task
 *.tar
 *.tar.gz
 *.zip
+
+# Results - ignore heavy raw frame runs, but track lightweight master CSV & learning registry
+results/runs/
+results/validation/
+!results/master_results.csv
+!results/learning/
+!results/learning/**
 
 # Local configuration and IDE
 .env
