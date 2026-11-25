@@ -2,10 +2,11 @@
 developmentMode = false
 
 [server]
-address = "localhost"
-maxUploadSize = 2048
+headless = true
 fileWatcherType = "none"
-headless = false
+maxUploadSize = 2048
+enableCORS = false
+enableXsrfProtection = false
 
 [browser]
 gatherUsageStats = false
