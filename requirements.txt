@@ -1,0 +1,11 @@
+# InSight Time & Motion Bench - Python 3.10, 3.11 or 3.12 (MediaPipe does not yet support 3.13)
+streamlit>=1.50,<2
+altair>=5
+opencv-python>=4.8
+numpy>=1.24
+pandas>=2.0
+scipy>=1.10
+mediapipe>=0.10.14
+torch>=2.1
+timm>=0.9
+einops>=0.6

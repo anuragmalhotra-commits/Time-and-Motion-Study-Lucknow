@@ -1,0 +1,18 @@
+[global]
+developmentMode = false
+
+[server]
+address = "localhost"
+maxUploadSize = 2048
+fileWatcherType = "none"
+headless = false
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "light"
+primaryColor = "#693d30"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f6f1ef"
+textColor = "#3b2620"
