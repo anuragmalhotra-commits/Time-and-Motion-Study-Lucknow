@@ -714,6 +714,32 @@ def page_validate():
                         width="stretch"
                     )
 
+    with st.expander("🔍 View & Manage Verified Training Clips in Knowledge Base", expanded=False):
+        if reg:
+            rows = []
+            for i, r in enumerate(reg):
+                f = r.get("features", {})
+                dur = float(f.get("duration_sec", 0.0))
+                ref = float(r.get("reference_count", 0.0))
+                pace = ref / (dur / 60.0) if dur > 0 else 0
+                rows.append({
+                    "Clip Label": r.get("clip_label", f"Clip-{i+1}"),
+                    "Video File": r.get("video_file", ""),
+                    "Start (s)": round(float(r.get("start_sec", 0.0)), 1),
+                    "End (s)": round(float(r.get("end_sec", 0.0)), 1),
+                    "Duration (s)": round(dur, 1),
+                    "Raw Movements": round(float(f.get("of_raw_count", 0.0)), 1),
+                    "Manual Count": ref,
+                    "Pace (stitches/min)": round(pace, 1)
+                })
+            st.dataframe(pd.DataFrame(rows), width="stretch")
+            if st.button("🗑️ Reset Knowledge Base Buffer", key="btn_clear_reg"):
+                learner.write_registry([])
+                st.success("Knowledge base reset. You can add fresh verified clips.")
+                st.rerun()
+        else:
+            st.info("No verified clips in buffer yet. Add counts below to start continuous learning.")
+
     st.markdown("---")
     st.markdown("#### 2. Enter or Upload Manual Counts for Validation")
 

@@ -337,7 +337,7 @@ class ContinuousLearner:
             self.model = ChikankariCycleNet.create_model()
             if CHECKPOINT_PATH.exists():
                 ckpt = torch.load(CHECKPOINT_PATH, map_location="cpu", weights_only=False)
-                self.model.load_state_dict(ckpt["state_dict"])
+                self.model.load_state_dict(ckpt["state_dict"], strict=False)
                 self.model.eval()
                 logger.info("Loaded trained PyTorch calibrator checkpoint.")
         except Exception as e:
@@ -350,13 +350,14 @@ class ContinuousLearner:
         try:
             with open(REGISTRY_FILE, "r", encoding="utf-8") as f:
                 records = json.load(f)
-                # Filter out corrupted records with NaN or duration < 1.0
+                # Filter out corrupted records with NaN, duration < 5s, or unnatural pace
                 clean = []
                 for r in records:
                     f = r.get("features", {})
                     dur = float(f.get("duration_sec", 0.0) or 0.0)
                     ref = float(r.get("reference_count", 0.0) or 0.0)
-                    if dur >= 1.0 and ref > 0 and not np.isnan(dur) and not np.isnan(ref):
+                    pace = ref / (dur / 60.0) if dur > 0 else 0
+                    if dur >= 5.0 and ref > 0 and 2.0 <= pace <= 120.0 and not np.isnan(dur) and not np.isnan(ref):
                         clean.append(r)
                 return clean
         except Exception:
